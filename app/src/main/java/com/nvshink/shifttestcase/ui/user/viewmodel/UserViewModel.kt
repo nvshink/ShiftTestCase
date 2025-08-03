@@ -65,8 +65,7 @@ open class UserViewModel @Inject constructor(
                 _uiState.update {
                     UserUiState.LoadingState(
                         isShowingList = uiState.isShowingList,
-                        isAtTop = uiState.isAtTop,
-                        isRefreshing = uiState.isRefreshing,
+                        isRefreshing = true,
                         contentType = contentType
                     )
                 }
@@ -78,8 +77,7 @@ open class UserViewModel @Inject constructor(
                         userList = users.data.second,
                         currentUser = if (uiState is UserUiState.SuccessState) uiState.currentUser else null,
                         isShowingList = uiState.isShowingList,
-                        isAtTop = uiState.isAtTop,
-                        isRefreshing = uiState.isRefreshing,
+                        isRefreshing = false,
                         contentType = contentType,
                     )
                 }
@@ -90,8 +88,7 @@ open class UserViewModel @Inject constructor(
                     UserUiState.ErrorState(
                         error = users.exception,
                         isShowingList = uiState.isShowingList,
-                        isAtTop = uiState.isAtTop,
-                        isRefreshing = uiState.isRefreshing,
+                        isRefreshing = false,
                         contentType = contentType
                     )
                 }
@@ -106,22 +103,6 @@ open class UserViewModel @Inject constructor(
 
     fun onEvent(event: UserEvent) {
         when (event) {
-            UserEvent.HideList -> _uiState.update {
-                when (it) {
-                    is UserUiState.SuccessState -> it.copy(isShowingList = false)
-                    is UserUiState.LoadingState -> it.copy(isShowingList = false)
-                    is UserUiState.ErrorState -> it.copy(isShowingList = false)
-                }
-            }
-
-            UserEvent.ShowList -> _uiState.update {
-                when (it) {
-                    is UserUiState.SuccessState -> it.copy(isShowingList = true)
-                    is UserUiState.LoadingState -> it.copy(isShowingList = true)
-                    is UserUiState.ErrorState -> it.copy(isShowingList = true)
-                }
-            }
-
             UserEvent.HideToTopButton -> _uiState.update {
                 when (it) {
                     is UserUiState.SuccessState -> it.copy(isShowingList = false)
@@ -155,7 +136,11 @@ open class UserViewModel @Inject constructor(
             is UserEvent.UpdateCurrentUser -> {
                 _uiState.update {
                     when (it) {
-                        is UserUiState.SuccessState -> it.copy(currentUser = event.user)
+                        is UserUiState.SuccessState -> it.copy(
+                            currentUser = event.user,
+                            isShowingList = event.user == null
+                        )
+
                         else -> it
                     }
                 }

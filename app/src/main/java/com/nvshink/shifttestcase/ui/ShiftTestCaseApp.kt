@@ -16,6 +16,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.nvshink.shifttestcase.ui.user.screen.UserScreen
 import com.nvshink.shifttestcase.ui.user.state.UserUiState
 import com.nvshink.shifttestcase.ui.user.viewmodel.UserViewModel
 import com.nvshink.shifttestcase.ui.utils.ContentType
@@ -59,23 +60,13 @@ fun ShiftTestCaseApp(
 
     val userViewModel: UserViewModel = hiltViewModel()
     val userUiState = userViewModel.uiState.collectAsState().value
-    Box(modifier = Modifier.padding(innerPadding)){
-        when (userUiState) {
-            is UserUiState.LoadingState -> {
-                CircularProgressIndicator()
-            }
-
-            is UserUiState.SuccessState -> {
-                LazyColumn {
-                    items(userUiState.userList) {
-                        Text("${it.name.first} ${it.name.last}")
-                    }
-                }
-            }
-
-            is UserUiState.ErrorState -> {
-                Text(userUiState.error?.message ?: "error")
-            }
-        }
+    Box {
+        UserScreen(
+            modifier = Modifier,
+            userUiState = userUiState,
+            onEvent = userViewModel::onEvent,
+            contentType = contentType,
+            innerPadding = innerPadding,
+        )
     }
 }

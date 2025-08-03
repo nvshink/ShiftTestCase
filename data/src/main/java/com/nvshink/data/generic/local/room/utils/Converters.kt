@@ -1,27 +1,43 @@
 package com.nvshink.data.generic.local.room.utils
 
 import androidx.room.TypeConverter
-import com.nvshink.data.user.local.entity.UserEntity
+import com.nvshink.data.user.local.entity.location.LocationEntity
+import com.nvshink.data.user.local.entity.name.NameEntity
+import com.nvshink.data.user.local.entity.picture.UserPictureEntity
 import kotlinx.serialization.json.Json
 
 class Converters {
+
+    //NameEntity
     @TypeConverter
-    fun fromJsonToUserEntity(string: String): UserEntity {
-        return Json.decodeFromString<UserEntity>(string)
+    fun fromJsonToNameEntity(string: String): NameEntity {
+        return Json.decodeFromString<NameEntity>(string)
     }
 
     @TypeConverter
-    fun fromUserEntityToJson(locationEntity: UserEntity): String {
+    fun fromNameEntityToJson(nameEntity: NameEntity): String {
+        return Json.encodeToString(nameEntity)
+    }
+
+    //LocationEntity
+    @TypeConverter
+    fun fromJsonToLocationEntity(string: String): LocationEntity {
+        return Json.decodeFromString<LocationEntity>(string)
+    }
+
+    @TypeConverter
+    fun fromLocationEntityToJson(locationEntity: LocationEntity): String {
         return Json.encodeToString(locationEntity)
     }
 
+    //UserPictureEntity
     @TypeConverter
-    fun fromJsonToListStrings(string: String): List<String> {
-        return Json.decodeFromString<List<String>>(string)
+    fun fromJsonToUserPictureEntity(string: String): UserPictureEntity {
+        return Json.decodeFromString<UserPictureEntity>(string)
     }
 
     @TypeConverter
-    fun fromListStringsToJson(list: List<String>): String {
-        return Json.encodeToString(list)
+    fun fromUserPictureEntityToJson(userPictureEntity: UserPictureEntity): String {
+        return Json.encodeToString(userPictureEntity)
     }
 }

@@ -19,71 +19,76 @@ class UserRepositoryImpl @Inject constructor(
     private val dao: UserDao,
     private val service: UserService
 ) : UserRepository {
-    override suspend fun getUsers(pageInfoModel: PageInfoModel?): Flow<Resource<Pair<PageInfoModel?, List<UserModel>>>> = flow {
-        emit(Resource.Loading)
-        try {
-            var response: PageResponse<UserResponse>
-            if (pageInfoModel != null) {
+    override suspend fun getUsers(pageInfoModel: PageInfoModel?): Flow<Resource<Pair<PageInfoModel?, List<UserModel>>>> =
+        flow {
+            emit(Resource.Loading)
+            try {
+                var response: PageResponse<UserResponse>
+                if (pageInfoModel != null) {
                     response = service.getGetListOfUsers(
                         seed = pageInfoModel.seed,
                         results = pageInfoModel.results,
                         page = pageInfoModel.pageCount
                     )
 
+                    Log.d("DATA_LOAD", response.toString())
 
-            //Separate info and result
-            val responseInfo = response.info
-            val responseResult = response.results
+                    //Separate info and result
+                    val responseInfo = response.info
+                    val responseResult = response.results
 
-            val newPageInfoModel = PageInfoModel(
-                pageCount = responseInfo.page,
-                seed = responseInfo.seed,
-                results = responseInfo.results,
-                version = responseInfo.version
-            )
 
-            //White result in local DB
-            responseResult.forEach {
-                dao.upsertUser(UserMapper.responseToEntity(it))
-            }
+                    val newPageInfoModel = PageInfoModel(
+                        pageCount = responseInfo.page,
+                        seed = responseInfo.seed,
+                        results = responseInfo.results,
+                        version = responseInfo.version
+                    )
 
-            // Return users
-            emit(
-                Resource.Success(
-                    Pair(
-                        first = newPageInfoModel,
-                        second = responseResult.map {
-                            UserMapper.responseToModel(it)
-                        }
-                    ),
-                    isLocal = false
-                )
-            )
-                }
-        } catch (e: Exception) {
-            Log.d("DATA_LOAD", e.message ?: "")
-            //Try load from cache
-            try {
-                dao.getUser().map {
-                    it.map { entity ->
-                        UserMapper.entityToModel(entity)
+                    //White result in local DB
+                    responseResult.forEach {
+                        dao.upsertUser(UserMapper.responseToEntity(it))
                     }
-                }.collect { item ->
+
+                    // Return users
                     emit(
                         Resource.Success(
-                            data = Pair(
-                                first = null,
-                                second = item
+                            Pair(
+                                first = newPageInfoModel,
+                                second = responseResult.map {
+                                    UserMapper.responseToModel(it)
+                                }
                             ),
-                            isLocal = true
+                            isLocal = false
                         )
                     )
                 }
-            } catch (dbException: Throwable) {
-                Log.d("DATA_LOAD", "Error ${dbException.message}")
-                emit(Resource.Error(dbException))
+            } catch (e: Exception) {
+                Log.d("DATA_LOAD", e.message ?: "")
+                //Try load from cache
+                try {
+                    dao.getUser().map {
+                        it.map { entity ->
+                            Log.d("DATA_LOAD",  "ЫыыЫыыы")
+                            Log.d("DATA_LOAD",  "ЫыыЫыыы" + UserMapper.entityToModel(entity).toString())
+                            UserMapper.entityToModel(entity)
+                        }
+                    }.collect { item ->
+                        emit(
+                            Resource.Success(
+                                data = Pair(
+                                    first = null,
+                                    second = item
+                                ),
+                                isLocal = true
+                            )
+                        )
+                    }
+                } catch (dbException: Throwable) {
+                    Log.d("DATA_LOAD", "Error ${dbException.message}")
+                    emit(Resource.Error(dbException))
+                }
             }
         }
-    }
 
 }

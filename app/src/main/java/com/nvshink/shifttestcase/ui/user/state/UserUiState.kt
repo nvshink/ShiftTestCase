@@ -5,13 +5,11 @@ import com.nvshink.shifttestcase.ui.utils.ContentType
 
 sealed interface UserUiState {
     val isShowingList: Boolean
-    val isAtTop: Boolean
     val isRefreshing: Boolean
     val contentType: ContentType
 
     data class LoadingState(
         override val isShowingList: Boolean = false,
-        override val isAtTop: Boolean = true,
         override val isRefreshing: Boolean = false,
         override val contentType: ContentType = ContentType.LIST_ONLY
     ) : UserUiState
@@ -20,7 +18,6 @@ sealed interface UserUiState {
         val userList: List<UserModel> = emptyList(),
         val currentUser: UserModel? = null,
         override val isShowingList: Boolean,
-        override val isAtTop: Boolean,
         override val isRefreshing: Boolean,
         override val contentType: ContentType
     ) : UserUiState
@@ -28,7 +25,6 @@ sealed interface UserUiState {
     data class ErrorState(
         val error: Throwable? = null,
         override val isShowingList: Boolean,
-        override val isAtTop: Boolean,
         override val isRefreshing: Boolean,
         override val contentType: ContentType
     ) : UserUiState

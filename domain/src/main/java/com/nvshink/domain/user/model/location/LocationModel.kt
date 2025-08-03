@@ -9,7 +9,7 @@ data class LocationModel(
     val city: String,
     val state: String,
     val country: String,
-    val postcode: Int,
+    val postcode: String,
     val coordinates: CoordinatesModel,
-    val timezone: UserTimeZoneModel
+    val timeZone: UserTimeZoneModel
 )
