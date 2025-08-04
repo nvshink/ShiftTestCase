@@ -2,6 +2,7 @@ package com.nvshink.shifttestcase.ui
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -60,9 +61,9 @@ fun ShiftTestCaseApp(
 
     val userViewModel: UserViewModel = hiltViewModel()
     val userUiState = userViewModel.uiState.collectAsState().value
-    Box {
+    Box(modifier = Modifier.fillMaxSize()) {
         UserScreen(
-            modifier = Modifier,
+            modifier = Modifier.fillMaxSize(),
             userUiState = userUiState,
             onEvent = userViewModel::onEvent,
             contentType = contentType,

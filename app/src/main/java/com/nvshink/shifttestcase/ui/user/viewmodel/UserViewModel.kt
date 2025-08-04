@@ -1,9 +1,11 @@
 package com.nvshink.shifttestcase.ui.user.viewmodel
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.nvshink.domain.pageinfo.PageInfoModel
 import com.nvshink.domain.resource.Resource
+import com.nvshink.domain.user.model.UserModel
 import com.nvshink.domain.user.repository.UserRepository
 import com.nvshink.shifttestcase.ui.user.event.UserEvent
 import com.nvshink.shifttestcase.ui.user.state.UserUiState
@@ -28,7 +30,7 @@ open class UserViewModel @Inject constructor(
     private val repository: UserRepository
 ) : ViewModel() {
     private val _isRefresh = MutableStateFlow(false)
-    private val _isLoadMore = MutableStateFlow(false)
+    private val _isLoadMore = MutableStateFlow(true)
     private val _contentType = MutableStateFlow(ContentType.LIST_ONLY)
     private val _pageInfoModel = MutableStateFlow<PageInfoModel?>(
         PageInfoModel(
@@ -39,33 +41,28 @@ open class UserViewModel @Inject constructor(
         )
     )
 
-    private val _users = combine(
-        _isRefresh,
-        _pageInfoModel
-    ) { isRefresh, pageInfoModel ->
-        _isLoadMore.update { false }
-        _isRefresh.update { false }
-        repository.getUsers(pageInfoModel)
-    }.flatMapLatest { flow -> flow }
-        .stateIn(
-            viewModelScope,
-            SharingStarted.WhileSubscribed(5000),
-            Resource.Loading
-        )
-
     private val _uiState = MutableStateFlow<UserUiState>(UserUiState.LoadingState())
+
+    private val _loadedUsers = combine(_isRefresh, _pageInfoModel) { _, pageInfoModel ->
+        repository.getUsers(pageInfoModel)
+    }.flatMapLatest { flow -> flow }.stateIn(
+        viewModelScope,
+        SharingStarted.WhileSubscribed(5000),
+        Resource.Loading
+    )
 
     val uiState = combine(
         _uiState,
-        _users,
+        _loadedUsers,
         _contentType
-    ) { uiState, users, contentType ->
-        when (users) {
+    ) { uiState, loadedUsers, contentType ->
+        when (loadedUsers) {
             Resource.Loading -> {
                 _uiState.update {
                     UserUiState.LoadingState(
+                        userList = uiState.userList,
                         isShowingList = uiState.isShowingList,
-                        isRefreshing = true,
+                        isRefreshing = _isRefresh.value,
                         contentType = contentType
                     )
                 }
@@ -74,10 +71,29 @@ open class UserViewModel @Inject constructor(
             is Resource.Success -> {
                 _uiState.update {
                     UserUiState.SuccessState(
-                        userList = users.data.second,
-                        currentUser = if (uiState is UserUiState.SuccessState) uiState.currentUser else null,
+                        userList = when {
+                            _isRefresh.value -> {
+                                _isRefresh.update { false }
+                                loadedUsers.data.second
+                            }
+                            _isLoadMore.value -> {
+                                _isLoadMore.update { false }
+                                if (loadedUsers.isLocal) {
+                                    emptyList()
+                                } else {
+                                    uiState.userList
+                                } + loadedUsers.data.second
+                            }
+
+                            else -> {
+                                uiState.userList
+                            }
+                        },
+                        currentUser =
+                            if (uiState is UserUiState.SuccessState) uiState.currentUser else null,
                         isShowingList = uiState.isShowingList,
-                        isRefreshing = false,
+                        isRefreshing = _isRefresh.value,
+                        isOnline = !loadedUsers.isLocal,
                         contentType = contentType,
                     )
                 }
@@ -86,14 +102,16 @@ open class UserViewModel @Inject constructor(
             is Resource.Error -> {
                 _uiState.update {
                     UserUiState.ErrorState(
-                        error = users.exception,
+                        error = loadedUsers.exception,
+                        userList = uiState.userList,
                         isShowingList = uiState.isShowingList,
-                        isRefreshing = false,
+                        isRefreshing = _isRefresh.value,
                         contentType = contentType
                     )
                 }
             }
         }
+
         uiState
     }.stateIn(
         viewModelScope,
@@ -103,24 +121,15 @@ open class UserViewModel @Inject constructor(
 
     fun onEvent(event: UserEvent) {
         when (event) {
-            UserEvent.HideToTopButton -> _uiState.update {
-                when (it) {
-                    is UserUiState.SuccessState -> it.copy(isShowingList = false)
-                    is UserUiState.LoadingState -> it.copy(isShowingList = false)
-                    is UserUiState.ErrorState -> it.copy(isShowingList = false)
+            UserEvent.LoadMore -> {
+                if (_uiState.value is UserUiState.SuccessState && (_uiState.value as UserUiState.SuccessState).isOnline) {
+                    _isLoadMore.update { true }
+                    _pageInfoModel.update { it?.copy(pageCount = it.pageCount + 1) }
                 }
             }
 
-            UserEvent.ShowToTopButton -> _uiState.update {
-                when (it) {
-                    is UserUiState.SuccessState -> it.copy(isShowingList = true)
-                    is UserUiState.LoadingState -> it.copy(isShowingList = true)
-                    is UserUiState.ErrorState -> it.copy(isShowingList = true)
-                }
-            }
-
-            UserEvent.LoadMore -> _isLoadMore.update { true }
             UserEvent.RefreshList -> {
+                _isRefresh.update { true }
                 _pageInfoModel.update {
                     PageInfoModel(
                         pageCount = 1,
@@ -129,8 +138,6 @@ open class UserViewModel @Inject constructor(
                         version = VERSION
                     )
                 }
-                _isRefresh.update { true }
-                _uiState.update { UserUiState.LoadingState(isRefreshing = true) }
             }
 
             is UserEvent.UpdateCurrentUser -> {
@@ -140,7 +147,6 @@ open class UserViewModel @Inject constructor(
                             currentUser = event.user,
                             isShowingList = event.user == null
                         )
-
                         else -> it
                     }
                 }

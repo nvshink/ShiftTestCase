@@ -1,5 +1,9 @@
 <resources>
     <string name="app_name">ShiftTestCase</string>
     <string name="icon_description_arrow_upward">Arrow up icon</string>
-
+    <string name="empty_list_title_users">We not found the users.</string>
+    <string name="empty_list_icon_description_users">Empty list</string>
+    <string name="button_refresh_label">Refresh</string>
+    <string name="location_street_short">st.</string>
+    <string name="location_street_long">street</string>
 </resources>

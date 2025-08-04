@@ -68,9 +68,8 @@ class UserRepositoryImpl @Inject constructor(
                 //Try load from cache
                 try {
                     dao.getUser().map {
+                        Log.d("DATA_LOAD", it.toString())
                         it.map { entity ->
-                            Log.d("DATA_LOAD",  "ЫыыЫыыы")
-                            Log.d("DATA_LOAD",  "ЫыыЫыыы" + UserMapper.entityToModel(entity).toString())
                             UserMapper.entityToModel(entity)
                         }
                     }.collect { item ->
