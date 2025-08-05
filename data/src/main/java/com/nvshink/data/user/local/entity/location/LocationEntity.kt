@@ -6,6 +6,16 @@ import com.nvshink.data.user.local.entity.location.usertimezone.UserTimeZoneEnti
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
+/**
+ * User location
+ * @param street Location street name
+ * @param city Location city name
+ * @param state Location state name
+ * @param country Location county name
+ * @param postcode User postcode
+ * @param coordinates User coordinates
+ * @param timeZone Time zone of user location
+ */
 @Serializable
 data class LocationEntity(
     val street: StreetEntity,

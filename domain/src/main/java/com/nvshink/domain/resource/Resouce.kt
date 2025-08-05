@@ -1,5 +1,8 @@
 package com.nvshink.domain.resource
 
+/**
+ * Resource is used to determine the status of the object: loading, successful or error
+ */
 sealed class Resource<out T> {
     data object Loading : Resource<Nothing>()
     data class Success<out T>(val data: T, val isLocal: Boolean = false, val onlineException: Throwable? = null) : Resource<T>()

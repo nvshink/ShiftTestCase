@@ -1,11 +1,9 @@
 package com.nvshink.shifttestcase.ui.user.viewmodel
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.nvshink.domain.pageinfo.PageInfoModel
 import com.nvshink.domain.resource.Resource
-import com.nvshink.domain.user.model.UserModel
 import com.nvshink.domain.user.repository.UserRepository
 import com.nvshink.shifttestcase.ui.user.event.UserEvent
 import com.nvshink.shifttestcase.ui.user.state.UserUiState
@@ -40,7 +38,7 @@ open class UserViewModel @Inject constructor(
             version = VERSION
         )
     )
-    private val _requestedPageInfoModel = MutableStateFlow<PageInfoModel?>(
+    private val _requestedPageInfoModel = MutableStateFlow(
         _pageInfoModel.value
     )
     private val _uiState = MutableStateFlow<UserUiState>(UserUiState.LoadingState())
@@ -96,6 +94,7 @@ open class UserViewModel @Inject constructor(
                         },
                         currentUser =
                             if (uiState is UserUiState.SuccessState) uiState.currentUser else null,
+                        error = loadedUsers.onlineException,
                         isShowingList = uiState.isShowingList,
                         isRefreshing = _isRefresh.value,
                         isOnline = !loadedUsers.isLocal,
@@ -169,6 +168,14 @@ open class UserViewModel @Inject constructor(
                     is UserUiState.ErrorState -> { it.copy(isShowingList = true) }
                     is UserUiState.LoadingState -> { it.copy(isShowingList = true) }
                     is UserUiState.SuccessState -> { it.copy(isShowingList = true) }
+                }
+            }
+
+            UserEvent.ClearError -> _uiState.update {
+                when(it) {
+                    is UserUiState.ErrorState -> { it.copy(error = null) }
+                    is UserUiState.LoadingState -> { it.copy(error = null) }
+                    is UserUiState.SuccessState -> { it.copy(error = null) }
                 }
             }
         }

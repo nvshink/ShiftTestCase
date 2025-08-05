@@ -20,8 +20,6 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.ClipEntry
-import androidx.compose.ui.platform.LocalClipboard
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.PasswordVisualTransformation
@@ -35,7 +33,7 @@ fun PasswordText(
 ) {
     var isPasswordVisible by remember { mutableStateOf(false) }
     val context = LocalContext.current
-    Row() {
+    Row {
         BasicTextField(
             value = password,
             onValueChange = {},

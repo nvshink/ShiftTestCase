@@ -7,5 +7,6 @@ sealed interface UserEvent {
     data object LoadMore: UserEvent
     data object HideList: UserEvent
     data object ShowList: UserEvent
+    data object ClearError : UserEvent
     data class UpdateCurrentUser(val user: UserModel?) : UserEvent
 }

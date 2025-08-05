@@ -21,6 +21,7 @@ class UserRepositoryImpl @Inject constructor(
 ) : UserRepository {
     override suspend fun getUsers(pageInfoModel: PageInfoModel?): Flow<Resource<Pair<PageInfoModel?, List<UserModel>>>> =
         flow {
+            //Return loading state
             emit(Resource.Loading)
             try {
                 var response: PageResponse<UserResponse>
@@ -30,9 +31,7 @@ class UserRepositoryImpl @Inject constructor(
                         results = pageInfoModel.results,
                         page = pageInfoModel.pageCount
                     )
-
                     Log.d("DATA_LOAD", response.toString())
-
                     //Separate info and result
                     val responseInfo = response.info
                     val responseResult = response.results
@@ -63,7 +62,7 @@ class UserRepositoryImpl @Inject constructor(
                         )
                     )
                 }
-            } catch (e: Exception) {
+            } catch (e: Throwable) {
                 Log.d("DATA_LOAD", e.message ?: "")
                 //Try load from cache
                 try {
@@ -79,7 +78,8 @@ class UserRepositoryImpl @Inject constructor(
                                     first = null,
                                     second = item
                                 ),
-                                isLocal = true
+                                isLocal = true,
+                                onlineException = e
                             )
                         )
                     }

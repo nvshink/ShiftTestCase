@@ -1,5 +1,6 @@
 <resources>
     <string name="app_name" translatable="false">ShiftTestCase</string>
+    <string name="notify_you_are_offline">Loaded data from the cache</string>
     <string name="icon_description_arrow_upward">Arrow up icon</string>
     <string name="icon_toggle_password_visibility">Toggle password visibility</string>
     <string name="icon_toggle_password_copy">Copy password</string>

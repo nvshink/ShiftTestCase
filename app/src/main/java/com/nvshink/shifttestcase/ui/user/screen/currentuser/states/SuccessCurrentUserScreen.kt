@@ -27,7 +27,6 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.ReadOnlyComposable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -259,27 +258,27 @@ fun SuccessCurrentUserScreen(
 
 @Composable
 fun periodTextFormatter(years: Int = 0, months: Int = 0, days: Int = 0): String {
-    var dateString: String = ""
+    var dateString = ""
     dateString += if (years > 0) {
         "$years " + when (years.toString().last().digitToInt()) {
-            1 -> stringResource(R.string.user_date_year).lowercase()
-            in 2..4 -> stringResource(R.string.user_date_years).lowercase()
+            1 -> if(years == 11) stringResource(R.string.user_date_years_ru).lowercase() else stringResource(R.string.user_date_year).lowercase()
+            in 2..4 -> if(years in 12..14) stringResource(R.string.user_date_years_ru).lowercase() else stringResource(R.string.user_date_years).lowercase()
             else -> stringResource(R.string.user_date_years_ru).lowercase()
         }
     } else ""
     dateString += if (months > 0) {
         " ${
             "$months " + when (months.toString().last().digitToInt()) {
-                1 -> stringResource(R.string.user_date_month).lowercase()
-                in 2..4 -> stringResource(R.string.user_date_months).lowercase()
+                1 -> if(months == 11) stringResource(R.string.user_date_months_ru).lowercase() else stringResource(R.string.user_date_month).lowercase()
+                in 2..4 -> if(months in 12..14) stringResource(R.string.user_date_months_ru).lowercase() else stringResource(R.string.user_date_months).lowercase()
                 else -> stringResource(R.string.user_date_months_ru).lowercase()
             }
         } "
     } else ""
     dateString += if (days > 0) {
         "$days " + when (days.toString().last().digitToInt()) {
-            1 -> stringResource(R.string.user_date_day).lowercase()
-            in 2..4 -> stringResource(R.string.user_date_days).lowercase()
+            1 -> if(days == 11) stringResource(R.string.user_date_days_ru).lowercase() else stringResource(R.string.user_date_day).lowercase()
+            in 2..4 -> if(days in 12..14) stringResource(R.string.user_date_days_ru).lowercase() else stringResource(R.string.user_date_days).lowercase()
             else -> stringResource(R.string.user_date_days_ru).lowercase()
         }
     } else ""

@@ -20,7 +20,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.Dp
 import com.nvshink.shifttestcase.R
-import com.nvshink.shifttestcase.ui.user.state.UserUiState
 import kotlinx.coroutines.flow.distinctUntilChanged
 
 @Composable

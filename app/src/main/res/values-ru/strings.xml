@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">ShiftTestCase</string>
     <string name="icon_description_arrow_upward">Иконка стрелки вверх</string>
+    <string name="notify_you_are_offline">Загруженные данные из кэша</string>
     <string name="icon_toggle_password_visibility">Переключатель видимости пароля</string>
     <string name="icon_toggle_password_copy">Скопировать пароль</string>
     <string name="empty_list_title_users">Мы не нашли пользователей.</string>

@@ -1,5 +1,9 @@
 package com.nvshink.data.generic
 
+/**
+ * Counties flags emojis code list
+ * @param emojiCode for example Australia flag code: `\uD83C\uDDE6\uD83C\uDDFA`
+ */
 enum class CountryFlags(val emojiCode: String) {
     AU("\uD83C\uDDE6\uD83C\uDDFA"),
     BR("\uD83C\uDDE7\uD83C\uDDF7"),
@@ -27,6 +31,9 @@ enum class CountryFlags(val emojiCode: String) {
     UN("\uD83C\uDDFA\uD83C\uDDF3");
 
     companion object {
+        /**
+         * Get country double letters code (example `"RU"`) and return emoji code (example `\uD83C\uDDF0\uD83C\uDDFF`)
+         */
         fun fromCountryCode(code: String): CountryFlags? =
             entries.firstOrNull { it.name.equals(code, ignoreCase = true) }
     }

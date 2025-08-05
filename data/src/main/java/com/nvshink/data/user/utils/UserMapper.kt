@@ -24,10 +24,11 @@ import com.nvshink.domain.user.model.location.usertimezone.UserTimeZoneModel
 import com.nvshink.domain.user.model.name.NameModel
 import com.nvshink.domain.user.model.picture.UserPictureModel
 import com.nvshink.domain.utils.UserGender
-import kotlinx.serialization.json.Json
 import java.time.ZonedDateTime
-import java.util.TimeZone
 
+/**
+ * Mapper to convert model, entity and response together
+ */
 object UserMapper {
     fun entityToModel(entity: UserEntity): UserModel = UserModel(
         username = entity.username,
