@@ -1,5 +1,6 @@
 package com.nvshink.shifttestcase.ui
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
@@ -15,6 +16,7 @@ import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.nvshink.shifttestcase.ui.user.screen.UserScreen
@@ -63,7 +65,11 @@ fun ShiftTestCaseApp(
     val userUiState = userViewModel.uiState.collectAsState().value
     Box(modifier = Modifier.fillMaxSize()) {
         UserScreen(
-            modifier = Modifier.fillMaxSize(),
+            modifier = Modifier.fillMaxSize()
+                .clip(screensShape)
+                .background(MaterialTheme.colorScheme.surfaceContainer),
+            currentUserModifier = Modifier
+                .clip(screensShape),
             userUiState = userUiState,
             onEvent = userViewModel::onEvent,
             contentType = contentType,

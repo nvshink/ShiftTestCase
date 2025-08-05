@@ -24,6 +24,7 @@ kotlinxCoroutines = "1.10.2"
 retrofit = "3.0.0"
 retrofit2KotlinxSerializationConverter = "1.0.0"
 hiltNavigationCompose = "1.2.0"
+mapsCompose = "6.6.0"
 
 
 [libraries]
@@ -58,6 +59,7 @@ androidx-room-common = { group = "androidx.room", name = "room-common", version.
 retrofit2 = { group = "com.squareup.retrofit2", name = "retrofit", version.ref = "retrofit" }
 retrofit2-kotlinx-serialization-converter = { module = "com.jakewharton.retrofit:retrofit2-kotlinx-serialization-converter", version.ref = "retrofit2KotlinxSerializationConverter" }
 androidx-hilt-navigation-compose = { group = "androidx.hilt", name = "hilt-navigation-compose", version.ref = "hiltNavigationCompose" }
+maps-compose = { group = "com.google.maps.android", name = "maps-compose", version.ref = "mapsCompose" }
 
 
 [plugins]

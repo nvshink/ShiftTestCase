@@ -11,7 +11,7 @@ sealed interface UserUiState {
 
     data class LoadingState(
         override val userList: List<UserModel> = emptyList(),
-        override val isShowingList: Boolean = false,
+        override val isShowingList: Boolean = true,
         override val isRefreshing: Boolean = false,
         override val contentType: ContentType = ContentType.LIST_ONLY
     ) : UserUiState
@@ -20,16 +20,16 @@ sealed interface UserUiState {
         val currentUser: UserModel? = null,
         val isOnline: Boolean = true,
         override val userList: List<UserModel> = emptyList(),
-        override val isShowingList: Boolean,
-        override val isRefreshing: Boolean,
-        override val contentType: ContentType
+        override val isShowingList: Boolean = true,
+        override val isRefreshing: Boolean = false,
+        override val contentType: ContentType = ContentType.LIST_ONLY
     ) : UserUiState
 
     data class ErrorState(
         val error: Throwable? = null,
         override val userList: List<UserModel> = emptyList(),
-        override val isShowingList: Boolean,
-        override val isRefreshing: Boolean,
-        override val contentType: ContentType
+        override val isShowingList: Boolean = true,
+        override val isRefreshing: Boolean = false,
+        override val contentType: ContentType = ContentType.LIST_ONLY
     ) : UserUiState
 }

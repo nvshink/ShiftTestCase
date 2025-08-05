@@ -21,7 +21,7 @@ import kotlinx.coroutines.flow.update
 import javax.inject.Inject
 
 const val SEED = "withLoveToTheShiftTeam"
-const val RESULTS = 10
+const val RESULTS = 20
 const val VERSION = "1.4"
 
 @OptIn(ExperimentalCoroutinesApi::class)
@@ -40,11 +40,13 @@ open class UserViewModel @Inject constructor(
             version = VERSION
         )
     )
-
+    private val _requestedPageInfoModel = MutableStateFlow<PageInfoModel?>(
+        _pageInfoModel.value
+    )
     private val _uiState = MutableStateFlow<UserUiState>(UserUiState.LoadingState())
 
-    private val _loadedUsers = combine(_isRefresh, _pageInfoModel) { _, pageInfoModel ->
-        repository.getUsers(pageInfoModel)
+    private val _loadedUsers = combine(_isRefresh, _requestedPageInfoModel) { _, requestedPageInfoModel ->
+        repository.getUsers(requestedPageInfoModel)
     }.flatMapLatest { flow -> flow }.stateIn(
         viewModelScope,
         SharingStarted.WhileSubscribed(5000),
@@ -69,6 +71,9 @@ open class UserViewModel @Inject constructor(
             }
 
             is Resource.Success -> {
+                _pageInfoModel.update {
+                    loadedUsers.data.first
+                }
                 _uiState.update {
                     UserUiState.SuccessState(
                         userList = when {
@@ -124,13 +129,13 @@ open class UserViewModel @Inject constructor(
             UserEvent.LoadMore -> {
                 if (_uiState.value is UserUiState.SuccessState && (_uiState.value as UserUiState.SuccessState).isOnline) {
                     _isLoadMore.update { true }
-                    _pageInfoModel.update { it?.copy(pageCount = it.pageCount + 1) }
+                    _requestedPageInfoModel.update { it?.copy(pageCount = (_pageInfoModel.value?.pageCount ?: 0) + 1) }
                 }
             }
 
             UserEvent.RefreshList -> {
                 _isRefresh.update { true }
-                _pageInfoModel.update {
+                _requestedPageInfoModel.update {
                     PageInfoModel(
                         pageCount = 1,
                         seed = SEED,
@@ -149,6 +154,21 @@ open class UserViewModel @Inject constructor(
                         )
                         else -> it
                     }
+                }
+            }
+
+            UserEvent.HideList -> _uiState.update {
+                when(it) {
+                    is UserUiState.ErrorState -> { it.copy(isShowingList = false) }
+                    is UserUiState.LoadingState -> { it.copy(isShowingList = false) }
+                    is UserUiState.SuccessState -> { it.copy(isShowingList = false) }
+                }
+            }
+            UserEvent.ShowList -> _uiState.update {
+                when(it) {
+                    is UserUiState.ErrorState -> { it.copy(isShowingList = true) }
+                    is UserUiState.LoadingState -> { it.copy(isShowingList = true) }
+                    is UserUiState.SuccessState -> { it.copy(isShowingList = true) }
                 }
             }
         }

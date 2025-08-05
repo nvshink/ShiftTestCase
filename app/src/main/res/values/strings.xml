@@ -1,9 +1,43 @@
 <resources>
-    <string name="app_name">ShiftTestCase</string>
+    <string name="app_name" translatable="false">ShiftTestCase</string>
     <string name="icon_description_arrow_upward">Arrow up icon</string>
+    <string name="icon_toggle_password_visibility">Toggle password visibility</string>
+    <string name="icon_toggle_password_copy">Copy password</string>
     <string name="empty_list_title_users">We not found the users.</string>
     <string name="empty_list_icon_description_users">Empty list</string>
+    <string name="empty_current_user">User not selected</string>
+    <string name="empty_current_user_icon_description">User not selected</string>
+    <string name="error_email_app_not_found">Email app is not found</string>
+    <string name="error_map_app_not_found">Map app is not found</string>
+    <string name="error_phone_app_not_found">Phone app is not found</string>
     <string name="button_refresh_label">Refresh</string>
-    <string name="location_street_short">st.</string>
-    <string name="location_street_long">street</string>
+    <string name="button_retry_label">Retry</string>
+    <string name="button_password_copy_toast">Password is copied</string>
+    <string name="user_location_street_short">st.</string>
+    <string name="user_location_street_long">Street</string>
+    <string name="user_location_long">Location</string>
+    <string name="user_name_long">Name</string>
+    <string name="user_gender_long">Gender</string>
+    <string name="user_gender_male_long">Male</string>
+    <string name="user_gender_female_long">Female</string>
+    <string name="user_gender_unknown_long">Unknown</string>
+    <string name="user_email_long">Email</string>
+    <string name="user_username_long">Username</string>
+    <string name="user_password_long">Password</string>
+    <string name="user_date_of_birth_long">Date of birth</string>
+    <string name="user_date_year">Year</string>
+    <string name="user_date_years">Years</string>
+    <string name="user_date_years_ru">Years</string>
+    <string name="user_date_month">Month</string>
+    <string name="user_date_months">Months</string>
+    <string name="user_date_months_ru">Months</string>
+    <string name="user_date_day">Day</string>
+    <string name="user_date_days">Days</string>
+    <string name="user_date_days_ru">Days</string>
+    <string name="user_registered_long">Registered</string>
+    <string name="user_registered_with_us">With us</string>
+    <string name="user_phone_long">Phone</string>
+    <string name="user_phone_short">Ph.</string>
+    <string name="user_cell_long">Cell</string>
+    <string name="user_nat_long">Nationality</string>
 </resources>

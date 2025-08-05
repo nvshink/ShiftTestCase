@@ -1,5 +1,7 @@
 package com.nvshink.shifttestcase.ui.user.screen.list
 
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -13,7 +15,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import coil.compose.AsyncImage
 import coil.compose.SubcomposeAsyncImage
 import com.nvshink.domain.user.model.UserModel
 import com.nvshink.shifttestcase.R
@@ -25,11 +26,21 @@ fun UserCard(
 ) {
     Card(onClick = onCardClick) {
         Row(modifier = Modifier.fillMaxWidth()) {
-            SubcomposeAsyncImage(
-                model = user.picture.medium,
-                contentDescription = null,
-                modifier = Modifier.size(84.dp).padding(8.dp).clip(MaterialTheme.shapes.medium)
-            )
+            Box(
+                modifier = Modifier
+                    .size(84.dp)
+                    .padding(8.dp)
+                    .clip(
+                        MaterialTheme.shapes.medium
+                    )
+                    .background(MaterialTheme.colorScheme.surfaceDim)
+            ) {
+                SubcomposeAsyncImage(
+                    model = user.picture.medium,
+                    contentDescription = null,
+                    modifier = Modifier.size(84.dp)
+                )
+            }
             Column(
                 modifier = Modifier.padding(8.dp)
             ) {
@@ -40,12 +51,12 @@ fun UserCard(
                 Text(
                     text = "${user.location.country}, ${user.location.city}, " +
                             "${user.location.street.name} " +
-                            "${  stringResource(R.string.location_street_short)} " +
+                            "${  stringResource(R.string.user_location_street_short)} " +
                             "№${user.location.street.number}",
                     style = MaterialTheme.typography.bodySmall
                 )
                 Text(
-                    text = user.phone,
+                    text = "${stringResource(R.string.user_phone_short)}: ${user.phone}",
                     style = MaterialTheme.typography.bodySmall
                 )
             }

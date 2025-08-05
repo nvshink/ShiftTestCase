@@ -33,30 +33,33 @@ import kotlinx.coroutines.runBlocking
 @Composable
 fun UsersList(
     users: List<UserModel>,
-    onEvent: (UserEvent) -> Unit,
+    onCardClick: (user: UserModel) -> Unit,
+    onRefresh: () -> Unit,
+    onLoadMore: () -> Unit,
     lazyListState: LazyListState,
+    isLoad: Boolean,
+    errorMessage: String?,
     isRefreshing: Boolean
 ) {
     Box {
         PullToRefreshBox(
             isRefreshing = isRefreshing,
-            onRefresh = { onEvent(UserEvent.RefreshList) }
+            onRefresh = onRefresh
         ) {
             InfinityLazyColumn(
+                modifier = Modifier.padding(horizontal = 16.dp),
                 items = users,
-                rowsArrangement = 20.dp,
+                rowsArrangement = 8.dp,
                 listItem = {
                     UserCard(
                         user = it,
-                        onCardClick = {
-                            onEvent(UserEvent.UpdateCurrentUser(it))
-                        }
+                        onCardClick = { onCardClick(it) }
                     )
                 },
                 lazyListState = lazyListState,
-                onLoadMore = {
-                    onEvent(UserEvent.LoadMore)
-                }
+                isLoad = isLoad,
+                errorMessage = errorMessage,
+                onLoadMore = onLoadMore
             )
         }
     }

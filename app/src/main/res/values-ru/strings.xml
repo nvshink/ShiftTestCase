@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">ShiftTestCase</string>
+    <string name="icon_description_arrow_upward">Иконка стрелки вверх</string>
+    <string name="icon_toggle_password_visibility">Переключатель видимости пароля</string>
+    <string name="icon_toggle_password_copy">Скопировать пароль</string>
+    <string name="empty_list_title_users">Мы не нашли пользователей.</string>
+    <string name="empty_list_icon_description_users">Пустой список</string>
+    <string name="empty_current_user">Пользователь не выбран</string>
+    <string name="empty_current_user_icon_description">Пользователь не выбран</string>
+    <string name="error_email_app_not_found">Почтовое приложение не найдено</string>
+    <string name="error_map_app_not_found">Приложение карты не найдено</string>
+    <string name="error_phone_app_not_found">Приложение для звонков не найдено</string>
+    <string name="button_refresh_label">Перезагрузить</string>
+    <string name="button_retry_label">Повторить</string>
+    <string name="button_password_copy_toast">Пароль скопирован</string>
+    <string name="user_location_street_short">ул.</string>
+    <string name="user_location_street_long">Улица</string>
+    <string name="user_location_long">Местоположение</string>
+    <string name="user_name_long">Имя</string>
+    <string name="user_gender_long">Гендер</string>
+    <string name="user_gender_male_long">Мужчина</string>
+    <string name="user_gender_female_long">Женщина</string>
+    <string name="user_gender_unknown_long">Неизвестно</string>
+    <string name="user_email_long">Эл. почта</string>
+    <string name="user_username_long">Имя пользователя</string>
+    <string name="user_password_long">Пароль</string>
+    <string name="user_date_of_birth_long">Дата рождения</string>
+    <string name="user_date_year">Год</string>
+    <string name="user_date_years">Года</string>
+    <string name="user_date_years_ru">Лет</string>
+    <string name="user_date_month">Месяц</string>
+    <string name="user_date_months">Месяца</string>
+    <string name="user_date_months_ru">Месяцев</string>
+    <string name="user_date_day">День</string>
+    <string name="user_date_days">Дня</string>
+    <string name="user_date_days_ru">Дней</string>
+    <string name="user_registered_long">Зарегестрирован</string>
+    <string name="user_registered_with_us">С нами</string>
+    <string name="user_phone_long">Телефон</string>
+    <string name="user_phone_short">Тф.</string>
+    <string name="user_cell_long">Сотовый</string>
+    <string name="user_nat_long">Национальность</string>
+</resources>
